@@ -23,7 +23,7 @@ export default function About() {
           </div>
           <div className="about-image">
             <img
-              src="/images/hero-bg.jpg"
+              src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&h=400&fit=crop"
               alt="আলামিন হার্ডওয়্যার দোকান"
               loading="lazy"
             />

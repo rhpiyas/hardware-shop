@@ -25,7 +25,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="section">
+    <section className="section" id="why-choose-us">
       <div className="container">
         <div className="section-header">
           <h2>কেন আলামিন হার্ডওয়্যার?</h2>

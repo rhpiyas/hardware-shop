@@ -3,7 +3,7 @@ import shopConfig from '../data/shopConfig';
 
 export default function StoreInfo() {
   return (
-    <section className="section">
+    <section className="section" id="store-info">
       <div className="container">
         <div className="section-header">
           <h2>দোকানের তথ্য</h2>

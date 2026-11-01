@@ -48,6 +48,9 @@ export const translations = {
     viewAllProducts: 'সব পণ্য দেখুন',
     contactForPrice: 'দাম জানতে যোগাযোগ করুন',
     addToList: 'তালিকায় যোগ করুন',
+    addedToList: 'যোগ হয়েছে!',
+    addedToCartNotification: 'তালিকায় যোগ করা হয়েছে',
+    viewList: 'তালিকা দেখুন',
     details: 'বিস্তারিত',
     confirmPriceAtShop: 'দাম নিশ্চিত করতে দোকানে যোগাযোগ করুন',
 
@@ -169,6 +172,9 @@ export const translations = {
     viewAllProducts: 'View All Products',
     contactForPrice: 'Contact for Price',
     addToList: 'Add to List',
+    addedToList: 'Added!',
+    addedToCartNotification: 'Added to inquiry list',
+    viewList: 'View List',
     details: 'Details',
     confirmPriceAtShop: 'Contact store to confirm current price',
 

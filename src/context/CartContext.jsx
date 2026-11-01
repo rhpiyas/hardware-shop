@@ -1,5 +1,5 @@
 /* oxlint-disable react/only-export-components */
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 const CartContext = createContext();
 
@@ -10,6 +10,10 @@ export function useCart() {
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [cartBump, setCartBump] = useState(false);
+  const [toast, setToast] = useState(null);
+  const bumpTimerRef = useRef(null);
+  const toastTimerRef = useRef(null);
 
   const addItem = useCallback((product) => {
     setItems(prev => {
@@ -23,6 +27,25 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+
+    // Trigger header list button bounce animation
+    setCartBump(true);
+    if (bumpTimerRef.current) clearTimeout(bumpTimerRef.current);
+    bumpTimerRef.current = setTimeout(() => {
+      setCartBump(false);
+    }, 700);
+
+    // Trigger floating notification toast
+    setToast(product);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
+      setToast(null);
+    }, 3500);
+  }, []);
+
+  const closeToast = useCallback(() => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToast(null);
   }, []);
 
   const removeItem = useCallback((productId) => {
@@ -57,6 +80,9 @@ export function CartProvider({ children }) {
       updateQuantity,
       clearCart,
       totalItems,
+      cartBump,
+      toast,
+      closeToast,
     }}>
       {children}
     </CartContext.Provider>

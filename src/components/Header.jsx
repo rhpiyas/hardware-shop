@@ -9,7 +9,7 @@ export default function Header({ onSearch }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { totalItems, setIsOpen } = useCart();
+  const { totalItems, setIsOpen, cartBump } = useCart();
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang, t } = useLanguage();
 
@@ -126,7 +126,7 @@ export default function Header({ onSearch }) {
               {/* List / Inquiry Toggle */}
               <button
                 type="button"
-                className="cart-btn"
+                className={`cart-btn ${cartBump ? 'bump' : ''}`}
                 onClick={() => setIsOpen(true)}
                 aria-label={t('cartTitle')}
                 title={t('cartTitle')}
@@ -186,7 +186,7 @@ export default function Header({ onSearch }) {
               </button>
               <button
                 type="button"
-                className="cart-btn"
+                className={`cart-btn ${cartBump ? 'bump' : ''}`}
                 onClick={() => { setIsMobileNavOpen(false); setIsOpen(true); }}
                 aria-label={t('cartTitle')}
                 title={t('cartTitle')}

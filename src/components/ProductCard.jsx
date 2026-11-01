@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
-import { ImageOff, ClipboardList } from 'lucide-react';
+import { ImageOff, ClipboardList, Check } from 'lucide-react';
 import { categories } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function ProductCard({ product, onViewDetails }) {
   const [imgError, setImgError] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const { addItem } = useCart();
   const { lang, t } = useLanguage();
 
@@ -18,6 +19,10 @@ export default function ProductCard({ product, onViewDetails }) {
   const handleAddToCart = useCallback((e) => {
     e.stopPropagation();
     addItem(product);
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 1500);
   }, [product, addItem]);
 
   return (
@@ -53,11 +58,20 @@ export default function ProductCard({ product, onViewDetails }) {
         <div className="product-actions">
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className={`btn btn-sm ${isAdded ? 'btn-added' : 'btn-primary'}`}
             onClick={handleAddToCart}
           >
-            <ClipboardList size={14} style={{ marginRight: '0.25rem', flexShrink: 0 }} />
-            {t('addToList')}
+            {isAdded ? (
+              <>
+                <Check size={14} className="check-icon-anim" style={{ marginRight: '0.25rem', flexShrink: 0 }} />
+                <span>{t('addedToList')}</span>
+              </>
+            ) : (
+              <>
+                <ClipboardList size={14} style={{ marginRight: '0.25rem', flexShrink: 0 }} />
+                <span>{t('addToList')}</span>
+              </>
+            )}
           </button>
           <button
             type="button"

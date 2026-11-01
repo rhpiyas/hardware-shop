@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ImageOff, Phone, ClipboardList } from 'lucide-react';
+import { X, ImageOff, Phone, ClipboardList, Check } from 'lucide-react';
 import { categories } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,6 +7,7 @@ import shopConfig from '../data/shopConfig';
 
 export default function ProductModal({ product, onClose }) {
   const [imgError, setImgError] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const { addItem } = useCart();
   const { lang, t } = useLanguage();
 
@@ -81,9 +82,26 @@ export default function ProductModal({ product, onClose }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn btn-primary" onClick={() => { addItem(product); }}>
-              <ClipboardList size={18} />
-              {t('addToList')}
+            <button
+              type="button"
+              className={`btn ${isAdded ? 'btn-added' : 'btn-primary'}`}
+              onClick={() => {
+                addItem(product);
+                setIsAdded(true);
+                setTimeout(() => setIsAdded(false), 1500);
+              }}
+            >
+              {isAdded ? (
+                <>
+                  <Check size={18} className="check-icon-anim" />
+                  {t('addedToList')}
+                </>
+              ) : (
+                <>
+                  <ClipboardList size={18} />
+                  {t('addToList')}
+                </>
+              )}
             </button>
             <button type="button" className="btn btn-secondary" onClick={handleContact}>
               <Phone size={18} />

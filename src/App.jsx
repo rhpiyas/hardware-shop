@@ -8,6 +8,7 @@ import Highlights from './components/Highlights';
 import Products from './components/Products';
 import ProductModal from './components/ProductModal';
 import CartSidebar from './components/CartSidebar';
+import CartToast from './components/CartToast';
 import About from './components/About';
 import WhyChooseUs from './components/WhyChooseUs';
 import Contact from './components/Contact';
@@ -62,6 +63,7 @@ export default function App() {
             />
           )}
           <CartSidebar />
+          <CartToast />
           <ScrollToTop />
         </CartProvider>
       </ThemeProvider>

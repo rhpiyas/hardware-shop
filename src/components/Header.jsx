@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, ShoppingCart, MapPin, Phone } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, MapPin, Phone, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 import shopConfig from '../data/shopConfig';
 
 const navLinks = [
@@ -16,6 +17,7 @@ export default function Header({ onSearch }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems, setIsOpen } = useCart();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -93,6 +95,16 @@ export default function Header({ onSearch }) {
             {/* Actions */}
             <div className="header-actions">
               <button
+                type="button"
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+                title={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+
+              <button
                 className="cart-btn"
                 onClick={() => setIsOpen(true)}
                 aria-label="তালিকা দেখুন"
@@ -128,9 +140,20 @@ export default function Header({ onSearch }) {
             <div className="logo-text">
               <span className="brand-name" style={{ fontSize: '1.125rem' }}>{shopConfig.name}</span>
             </div>
-            <button onClick={() => setIsMobileNavOpen(false)} aria-label="মেনু বন্ধ করুন">
-              <X size={24} />
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <button
+                type="button"
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+                title={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button onClick={() => setIsMobileNavOpen(false)} aria-label="মেনু বন্ধ করুন">
+                <X size={24} />
+              </button>
+            </div>
           </div>
 
           {/* Mobile Search */}

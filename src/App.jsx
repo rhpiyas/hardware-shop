@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -29,36 +30,38 @@ export default function App() {
   }, []);
 
   return (
-    <CartProvider>
-      <Header onSearch={handleSearch} />
-      <main>
-        <Hero />
-        <Highlights />
-        <Products
-          searchQuery={searchQuery}
-          activeCategory={activeCategory}
-          sortOrder={sortOrder}
-          onSearchChange={setSearchQuery}
-          onCategoryChange={setActiveCategory}
-          onSortChange={setSortOrder}
-          onViewDetails={setSelectedProduct}
-        />
-        <About />
-        <WhyChooseUs />
-        <StoreInfo />
-        <Contact />
-      </main>
-      <Footer />
+    <ThemeProvider>
+      <CartProvider>
+        <Header onSearch={handleSearch} />
+        <main>
+          <Hero />
+          <Highlights />
+          <Products
+            searchQuery={searchQuery}
+            activeCategory={activeCategory}
+            sortOrder={sortOrder}
+            onSearchChange={setSearchQuery}
+            onCategoryChange={setActiveCategory}
+            onSortChange={setSortOrder}
+            onViewDetails={setSelectedProduct}
+          />
+          <About />
+          <WhyChooseUs />
+          <StoreInfo />
+          <Contact />
+        </main>
+        <Footer />
 
-      {/* Overlays */}
-      {selectedProduct && (
-        <ProductModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
-      <CartSidebar />
-      <ScrollToTop />
-    </CartProvider>
+        {/* Overlays */}
+        {selectedProduct && (
+          <ProductModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+        <CartSidebar />
+        <ScrollToTop />
+      </CartProvider>
+    </ThemeProvider>
   );
 }

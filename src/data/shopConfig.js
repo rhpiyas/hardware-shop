@@ -12,10 +12,15 @@ const shopConfig = {
 
   // ঠিকানা
   address: 'রামপুর বাজার, কালিহাতি, টাঙ্গাইল, বাংলাদেশ',
+  addressEn: 'Rampur Bazar, Kalihati, Tangail, Bangladesh',
   addressShort: 'রামপুর বাজার, কালিহাতি, টাঙ্গাইল',
+  addressShortEn: 'Rampur Bazar, Kalihati, Tangail',
   district: 'টাঙ্গাইল',
+  districtEn: 'Tangail',
   upazila: 'কালিহাতি',
+  upazilaEn: 'Kalihati',
   area: 'রামপুর বাজার',
+  areaEn: 'Rampur Bazar',
 
   // যোগাযোগ — প্রকৃত নম্বর পাওয়ার পর এখানে আপডেট করুন
   // ⚠️ নিচের নম্বরগুলো প্লেসহোল্ডার। আসল নম্বর দিয়ে প্রতিস্থাপন করুন।

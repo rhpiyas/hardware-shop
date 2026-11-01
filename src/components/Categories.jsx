@@ -3,6 +3,7 @@ import {
   Lock, Wrench, Drill, Droplets, FlaskConical, Package
 } from 'lucide-react';
 import { categories } from '../data/products';
+import { useLanguage } from '../context/LanguageContext';
 
 const iconMap = {
   building: Building2,
@@ -20,8 +21,10 @@ const iconMap = {
 };
 
 export default function Categories({ activeCategory, onCategoryChange }) {
+  const { lang, t } = useLanguage();
+
   return (
-    <div className="categories-bar" id="categories" role="tablist" aria-label="পণ্যের ক্যাটাগরি">
+    <div className="categories-bar" id="categories" role="tablist" aria-label={t('productCategories')}>
       <button
         type="button"
         role="tab"
@@ -30,11 +33,13 @@ export default function Categories({ activeCategory, onCategoryChange }) {
         onClick={() => onCategoryChange('all')}
       >
         <Package size={17} className="category-pill-icon" />
-        <span>সব পণ্য</span>
+        <span>{t('allCategories')}</span>
       </button>
       {categories.map(cat => {
         const Icon = iconMap[cat.icon] || Package;
         const isActive = activeCategory === cat.id;
+        const categoryName = lang === 'en' ? cat.nameEn : cat.name;
+
         return (
           <button
             key={cat.id}
@@ -45,7 +50,7 @@ export default function Categories({ activeCategory, onCategoryChange }) {
             onClick={() => onCategoryChange(cat.id)}
           >
             <Icon size={17} className="category-pill-icon" />
-            <span>{cat.name}</span>
+            <span>{categoryName}</span>
           </button>
         );
       })}

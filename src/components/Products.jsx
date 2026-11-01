@@ -3,6 +3,7 @@ import { Search, X, SearchX, ArrowUpDown, ChevronDown } from 'lucide-react';
 import products, { categories } from '../data/products';
 import ProductCard from './ProductCard';
 import Categories from './Categories';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Products({
   searchQuery,
@@ -13,6 +14,8 @@ export default function Products({
   onSortChange,
   onViewDetails,
 }) {
+  const { lang, t } = useLanguage();
+
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
@@ -27,21 +30,24 @@ export default function Products({
       result = result.filter(p =>
         p.name.toLowerCase().includes(query) ||
         p.nameEn.toLowerCase().includes(query) ||
-        p.description.toLowerCase().includes(query)
+        p.description.toLowerCase().includes(query) ||
+        (p.descriptionEn && p.descriptionEn.toLowerCase().includes(query))
       );
     }
 
     // Sort
     if (sortOrder === 'price-low') {
       result.sort((a, b) => {
+        if (a.price === null && b.price === null) return 0;
         if (a.price === null) return 1;
-        if (b.price === null) return 1;
+        if (b.price === null) return -1;
         return a.price - b.price;
       });
     } else if (sortOrder === 'price-high') {
       result.sort((a, b) => {
+        if (a.price === null && b.price === null) return 0;
         if (a.price === null) return 1;
-        if (b.price === null) return 1;
+        if (b.price === null) return -1;
         return b.price - a.price;
       });
     }
@@ -50,7 +56,9 @@ export default function Products({
   }, [searchQuery, activeCategory, sortOrder]);
 
   const activeCategoryName = activeCategory && activeCategory !== 'all'
-    ? categories.find(c => c.id === activeCategory)?.name
+    ? (lang === 'en'
+        ? categories.find(c => c.id === activeCategory)?.nameEn
+        : categories.find(c => c.id === activeCategory)?.name)
     : null;
 
   const handleResetFilters = () => {
@@ -59,12 +67,14 @@ export default function Products({
     onSortChange('default');
   };
 
+  const countFormatted = filteredProducts.length.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US');
+
   return (
     <section className="section" id="products">
       <div className="container">
         <div className="section-header">
-          <h2>আমাদের পণ্যসমূহ</h2>
-          <p>আপনার প্রয়োজনীয় হার্ডওয়্যার পণ্য খুঁজে নিন সহজেই।</p>
+          <h2>{t('productsTitle')}</h2>
+          <p>{t('productsSubtitle')}</p>
         </div>
 
         {/* Categories Bar */}
@@ -79,17 +89,17 @@ export default function Products({
             <Search size={18} className="search-icon" />
             <input
               type="text"
-              placeholder="যেমন: সিমেন্ট, পাইপ, রং, হাতুড়ি..."
+              placeholder={t('productsSearchPlaceholder')}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              aria-label="পণ্য সার্চ করুন"
+              aria-label={t('productsSearchPlaceholder')}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => onSearchChange('')}
                 className="search-clear-btn"
-                aria-label="সার্চ মুছুন"
+                aria-label={t('removeItem')}
               >
                 <X size={16} />
               </button>
@@ -98,7 +108,7 @@ export default function Products({
 
           <div className="products-toolbar-right">
             <span className="products-count">
-              মোট <strong>{filteredProducts.length.toLocaleString('bn-BD')}</strong>টি পণ্য
+              {t('totalProducts', { count: countFormatted })}
             </span>
 
             {activeCategoryName && (
@@ -107,7 +117,7 @@ export default function Products({
                 <button
                   type="button"
                   onClick={() => onCategoryChange('all')}
-                  aria-label="ক্যাটাগরি ফিল্টার মুছুন"
+                  aria-label={t('removeItem')}
                 >
                   <X size={13} />
                 </button>
@@ -119,12 +129,12 @@ export default function Products({
               <select
                 value={sortOrder}
                 onChange={(e) => onSortChange(e.target.value)}
-                aria-label="পণ্য সাজান"
+                aria-label={t('sortDefault')}
                 className="sort-select"
               >
-                <option value="default">সাজানোর ক্রম</option>
-                <option value="price-low">দাম: কম থেকে বেশি</option>
-                <option value="price-high">দাম: বেশি থেকে কম</option>
+                <option value="default">{t('sortDefault')}</option>
+                <option value="price-low">{t('sortPriceLow')}</option>
+                <option value="price-high">{t('sortPriceHigh')}</option>
               </select>
               <ChevronDown size={15} className="sort-chevron" />
             </div>
@@ -145,10 +155,10 @@ export default function Products({
         ) : (
           <div className="empty-state">
             <SearchX size={48} />
-            <h3>কোনো পণ্য পাওয়া যায়নি</h3>
-            <p>আপনার সার্চ বা ফিল্টারের সাথে কোনো পণ্য মেলেনি। অন্য কিছু খুঁজে দেখুন।</p>
+            <h3>{t('noProductsFound')}</h3>
+            <p>{t('noProductsDesc')}</p>
             <button className="btn btn-primary" onClick={handleResetFilters}>
-              সব পণ্য দেখুন
+              {t('viewAllProducts')}
             </button>
           </div>
         )}

@@ -2,13 +2,19 @@ import { useState, useEffect } from 'react';
 import { X, ImageOff, Phone, ShoppingCart } from 'lucide-react';
 import { categories } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 import shopConfig from '../data/shopConfig';
 
 export default function ProductModal({ product, onClose }) {
   const [imgError, setImgError] = useState(false);
   const { addItem } = useCart();
+  const { lang, t } = useLanguage();
 
-  const categoryName = categories.find(c => c.id === product.category)?.name || '';
+  const cat = categories.find(c => c.id === product.category);
+  const categoryName = lang === 'en' ? (cat?.nameEn || '') : (cat?.name || '');
+  const productName = lang === 'en' ? product.nameEn : product.name;
+  const description = (lang === 'en' && product.descriptionEn) ? product.descriptionEn : product.description;
+  const unit = (lang === 'en' && product.unitEn) ? product.unitEn : product.unit;
 
   // Close on escape
   useEffect(() => {
@@ -23,9 +29,10 @@ export default function ProductModal({ product, onClose }) {
 
   const handleContact = () => {
     if (shopConfig.whatsapp) {
-      const message = encodeURIComponent(
-        `আসসালামু আলাইকুম,\nআমি "${product.name}" পণ্যটির দাম ও স্টক সম্পর্কে জানতে চাই।\n\nধন্যবাদ।`
-      );
+      const messageText = lang === 'en'
+        ? `Hello,\nI would like to inquire about "${productName}" (current price & stock availability).\n\nThank you.`
+        : `আসসালামু আলাইকুম,\nআমি "${product.name}" পণ্যটির দাম ও স্টক সম্পর্কে জানতে চাই।\n\nধন্যবাদ।`;
+      const message = encodeURIComponent(messageText);
       window.open(`https://wa.me/${shopConfig.whatsapp.replace('+', '')}?text=${message}`, '_blank');
     } else {
       const el = document.querySelector('#contact');
@@ -37,7 +44,7 @@ export default function ProductModal({ product, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose} aria-label="বন্ধ করুন">
+        <button type="button" className="modal-close" onClick={onClose} aria-label={t('close')}>
           <X size={20} />
         </button>
 
@@ -45,7 +52,7 @@ export default function ProductModal({ product, onClose }) {
           {!imgError ? (
             <img
               src={product.image}
-              alt={product.name}
+              alt={productName}
               onError={() => setImgError(true)}
             />
           ) : (
@@ -57,30 +64,30 @@ export default function ProductModal({ product, onClose }) {
 
         <div className="modal-body">
           <span className="product-category-badge">{categoryName}</span>
-          <h2>{product.name}</h2>
-          <p className="description">{product.description}</p>
+          <h2>{productName}</h2>
+          <p className="description">{description}</p>
 
           <div className="product-price">
             {product.price ? (
               <>
-                <span className="price">৳{product.price.toLocaleString('bn-BD')}</span>
-                <span className="unit">{product.unit}</span>
+                <span className="price">৳{product.price.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US')}</span>
+                <span className="unit">{unit}</span>
               </>
             ) : (
               <span className="contact-price" style={{ fontSize: '1rem' }}>
-                দাম নিশ্চিত করতে দোকানে যোগাযোগ করুন
+                {t('confirmPriceAtShop')}
               </span>
             )}
           </div>
 
           <div className="modal-actions">
-            <button className="btn btn-primary" onClick={() => { addItem(product); }}>
+            <button type="button" className="btn btn-primary" onClick={() => { addItem(product); }}>
               <ShoppingCart size={18} />
-              তালিকায় যোগ করুন
+              {t('addToList')}
             </button>
-            <button className="btn btn-secondary" onClick={handleContact}>
+            <button type="button" className="btn btn-secondary" onClick={handleContact}>
               <Phone size={18} />
-              দাম জানতে যোগাযোগ করুন
+              {t('contactForPrice')}
             </button>
           </div>
         </div>

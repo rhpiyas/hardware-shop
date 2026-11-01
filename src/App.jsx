@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
@@ -30,38 +31,40 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider>
-      <CartProvider>
-        <Header onSearch={handleSearch} />
-        <main>
-          <Hero />
-          <Highlights />
-          <Products
-            searchQuery={searchQuery}
-            activeCategory={activeCategory}
-            sortOrder={sortOrder}
-            onSearchChange={setSearchQuery}
-            onCategoryChange={setActiveCategory}
-            onSortChange={setSortOrder}
-            onViewDetails={setSelectedProduct}
-          />
-          <About />
-          <WhyChooseUs />
-          <StoreInfo />
-          <Contact />
-        </main>
-        <Footer />
+    <LanguageProvider>
+      <ThemeProvider>
+        <CartProvider>
+          <Header onSearch={handleSearch} />
+          <main>
+            <Hero />
+            <Highlights />
+            <Products
+              searchQuery={searchQuery}
+              activeCategory={activeCategory}
+              sortOrder={sortOrder}
+              onSearchChange={setSearchQuery}
+              onCategoryChange={setActiveCategory}
+              onSortChange={setSortOrder}
+              onViewDetails={setSelectedProduct}
+            />
+            <About />
+            <WhyChooseUs />
+            <StoreInfo />
+            <Contact />
+          </main>
+          <Footer />
 
-        {/* Overlays */}
-        {selectedProduct && (
-          <ProductModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
-        )}
-        <CartSidebar />
-        <ScrollToTop />
-      </CartProvider>
-    </ThemeProvider>
+          {/* Overlays */}
+          {selectedProduct && (
+            <ProductModal
+              product={selectedProduct}
+              onClose={() => setSelectedProduct(null)}
+            />
+          )}
+          <CartSidebar />
+          <ScrollToTop />
+        </CartProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }

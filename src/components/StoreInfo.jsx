@@ -1,12 +1,21 @@
 import { Store, MapPin, Clock, Phone } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import shopConfig from '../data/shopConfig';
 
 export default function StoreInfo() {
+  const { lang, t } = useLanguage();
+
+  const shopName = lang === 'en' ? shopConfig.nameEn : shopConfig.name;
+  const address = lang === 'en' ? (shopConfig.addressShortEn || 'Rampur Bazar, Kalihati, Tangail') : shopConfig.addressShort;
+  const hours = lang === 'en'
+    ? '8:00 AM – 9:00 PM'
+    : (shopConfig.openingHours ? `${shopConfig.openingHours} — ${shopConfig.offDay}` : t('needToConfirm'));
+
   return (
     <section className="section" id="store-info">
       <div className="container">
         <div className="section-header">
-          <h2>দোকানের তথ্য</h2>
+          <h2>{t('storeInfoTitle')}</h2>
         </div>
         <div className="store-info-grid">
           <div className="store-info-item">
@@ -14,8 +23,8 @@ export default function StoreInfo() {
               <Store size={22} />
             </div>
             <div>
-              <h4>দোকানের নাম</h4>
-              <p>{shopConfig.name}</p>
+              <h4>{t('shopNameLabel')}</h4>
+              <p>{shopName}</p>
             </div>
           </div>
 
@@ -24,8 +33,8 @@ export default function StoreInfo() {
               <MapPin size={22} />
             </div>
             <div>
-              <h4>ঠিকানা</h4>
-              <p>{shopConfig.addressShort}</p>
+              <h4>{t('addressLabel')}</h4>
+              <p>{address}</p>
             </div>
           </div>
 
@@ -34,8 +43,8 @@ export default function StoreInfo() {
               <Clock size={22} />
             </div>
             <div>
-              <h4>খোলার সময়</h4>
-              <p>{shopConfig.openingHours || 'দোকান থেকে নিশ্চিত করতে হবে'}</p>
+              <h4>{t('openingHoursLabel')}</h4>
+              <p>{hours}</p>
             </div>
           </div>
 
@@ -44,8 +53,8 @@ export default function StoreInfo() {
               <Phone size={22} />
             </div>
             <div>
-              <h4>যোগাযোগ</h4>
-              <p>{shopConfig.phone || 'ফোন নম্বর যোগ করতে হবে'}</p>
+              <h4>{t('contactLabel')}</h4>
+              <p>{shopConfig.phone || t('needToAddPhone')}</p>
             </div>
           </div>
         </div>

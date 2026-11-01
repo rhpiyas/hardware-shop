@@ -1,16 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, ShoppingCart, MapPin, Phone, Sun, Moon } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, MapPin, Phone, Sun, Moon, Languages } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import shopConfig from '../data/shopConfig';
-
-const navLinks = [
-  { label: 'হোম', href: '#home' },
-  { label: 'পণ্যসমূহ', href: '#products' },
-  { label: 'ক্যাটাগরি', href: '#categories' },
-  { label: 'আমাদের সম্পর্কে', href: '#about' },
-  { label: 'যোগাযোগ', href: '#contact' },
-];
 
 export default function Header({ onSearch }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,6 +11,15 @@ export default function Header({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems, setIsOpen } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { lang, toggleLang, t } = useLanguage();
+
+  const navLinks = [
+    { label: t('home'), href: '#home' },
+    { label: t('products'), href: '#products' },
+    { label: t('categories'), href: '#categories' },
+    { label: t('about'), href: '#about' },
+    { label: t('contact'), href: '#contact' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -39,6 +41,9 @@ export default function Header({ onSearch }) {
     }
   }, []);
 
+  const brandName = lang === 'en' ? shopConfig.nameEn : shopConfig.name;
+  const addressShort = lang === 'en' ? (shopConfig.addressShortEn || 'Rampur Bazar, Kalihati') : shopConfig.addressShort;
+
   return (
     <>
       <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
@@ -46,7 +51,7 @@ export default function Header({ onSearch }) {
         <div className="header-top">
           <div className="container">
             <div className="header-top-left">
-              <span><MapPin size={14} /> {shopConfig.addressShort}</span>
+              <span><MapPin size={14} /> {addressShort}</span>
               {shopConfig.phone && (
                 <span><Phone size={14} /> {shopConfig.phone}</span>
               )}
@@ -66,8 +71,8 @@ export default function Header({ onSearch }) {
                 </svg>
               </div>
               <div className="logo-text">
-                <span className="brand-name">{shopConfig.name}</span>
-                <span className="brand-sub">{shopConfig.area}, {shopConfig.upazila}</span>
+                <span className="brand-name">{brandName}</span>
+                <span className="brand-sub">{lang === 'en' ? 'Kalihati, Tangail' : `${shopConfig.area}, ${shopConfig.upazila}`}</span>
               </div>
             </a>
 
@@ -85,29 +90,42 @@ export default function Header({ onSearch }) {
               <Search size={18} />
               <input
                 type="text"
-                placeholder="পণ্যের নাম লিখে খুঁজুন..."
+                placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={handleSearch}
-                aria-label="পণ্য খুঁজুন"
+                aria-label={t('searchPlaceholder')}
               />
             </div>
 
             {/* Actions */}
             <div className="header-actions">
+              {/* Language Toggle */}
+              <button
+                type="button"
+                className="lang-toggle-btn"
+                onClick={toggleLang}
+                aria-label={lang === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
+                title={lang === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
+              >
+                <Languages size={16} />
+                <span className="lang-text">{lang === 'bn' ? 'EN' : 'বাং'}</span>
+              </button>
+
+              {/* Theme Toggle */}
               <button
                 type="button"
                 className="theme-toggle-btn"
                 onClick={toggleTheme}
-                aria-label={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
-                title={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+                aria-label={theme === 'dark' ? t('lightMode') : t('darkMode')}
+                title={theme === 'dark' ? t('lightMode') : t('darkMode')}
               >
-                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
               </button>
 
               <button
                 className="cart-btn"
                 onClick={() => setIsOpen(true)}
-                aria-label="তালিকা দেখুন"
+                aria-label={t('cartTitle')}
               >
                 <ShoppingCart size={22} />
                 {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
@@ -118,13 +136,13 @@ export default function Header({ onSearch }) {
                 className="contact-btn-header"
                 onClick={(e) => handleNavClick(e, '#contact')}
               >
-                যোগাযোগ
+                {t('contact')}
               </a>
 
               <button
                 className="mobile-menu-btn"
                 onClick={() => setIsMobileNavOpen(true)}
-                aria-label="মেনু খুলুন"
+                aria-label={t('openMenu')}
               >
                 <Menu size={24} />
               </button>
@@ -138,19 +156,29 @@ export default function Header({ onSearch }) {
         <div className="mobile-nav-content" onClick={e => e.stopPropagation()}>
           <div className="mobile-nav-header">
             <div className="logo-text">
-              <span className="brand-name" style={{ fontSize: '1.125rem' }}>{shopConfig.name}</span>
+              <span className="brand-name" style={{ fontSize: '1.125rem' }}>{brandName}</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+              <button
+                type="button"
+                className="lang-toggle-btn"
+                onClick={toggleLang}
+                aria-label={lang === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
+                title={lang === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
+              >
+                <Languages size={15} />
+                <span className="lang-text">{lang === 'bn' ? 'EN' : 'বাং'}</span>
+              </button>
               <button
                 type="button"
                 className="theme-toggle-btn"
                 onClick={toggleTheme}
-                aria-label={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
-                title={theme === 'dark' ? 'লাইট মোড চালু করুন' : 'ডার্ক মোড চালু করুন'}
+                aria-label={theme === 'dark' ? t('lightMode') : t('darkMode')}
+                title={theme === 'dark' ? t('lightMode') : t('darkMode')}
               >
-                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <button onClick={() => setIsMobileNavOpen(false)} aria-label="মেনু বন্ধ করুন">
+              <button onClick={() => setIsMobileNavOpen(false)} aria-label={t('closeMenu')}>
                 <X size={24} />
               </button>
             </div>
@@ -161,10 +189,10 @@ export default function Header({ onSearch }) {
             <Search size={18} />
             <input
               type="text"
-              placeholder="পণ্যের নাম লিখে খুঁজুন..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={handleSearch}
-              aria-label="পণ্য খুঁজুন"
+              aria-label={t('searchPlaceholder')}
             />
           </div>
 

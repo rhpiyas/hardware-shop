@@ -1,9 +1,13 @@
 import { MapPin, Phone, ExternalLink } from 'lucide-react';
 import shopConfig from '../data/shopConfig';
 import { categories } from '../data/products';
+import { useLanguage } from '../context/LanguageContext';
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const { lang, t } = useLanguage();
+  const currentYear = lang === 'bn' ? CURRENT_YEAR.toLocaleString('bn-BD').replace(/,/g, '') : CURRENT_YEAR;
 
   const scrollTo = (e, id) => {
     e.preventDefault();
@@ -26,35 +30,36 @@ export default function Footer() {
                 </svg>
               </div>
               <div className="logo-text">
-                <span className="brand-name">{shopConfig.name}</span>
-                <span className="brand-sub">{shopConfig.area}, {shopConfig.upazila}</span>
+                <span className="brand-name">{lang === 'en' ? shopConfig.nameEn : shopConfig.name}</span>
+                <span className="brand-sub">
+                  {lang === 'en'
+                    ? `${shopConfig.areaEn}, ${shopConfig.upazilaEn}`
+                    : `${shopConfig.area}, ${shopConfig.upazila}`}
+                </span>
               </div>
             </a>
-            <p>
-              বাড়ি নির্মাণ ও মেরামতের জন্য প্রয়োজনীয় হার্ডওয়্যার সামগ্রী।
-              সিমেন্ট, রড, রং, পাইপ, বৈদ্যুতিক সরঞ্জাম এবং আরও অনেক কিছু।
-            </p>
+            <p>{t('footerDesc')}</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4>দ্রুত লিংক</h4>
+            <h4>{t('quickLinks')}</h4>
             <div className="footer-links">
-              <a href="#home" onClick={(e) => scrollTo(e, '#home')}>হোম</a>
-              <a href="#products" onClick={(e) => scrollTo(e, '#products')}>পণ্যসমূহ</a>
-              <a href="#categories" onClick={(e) => scrollTo(e, '#categories')}>ক্যাটাগরি</a>
-              <a href="#about" onClick={(e) => scrollTo(e, '#about')}>আমাদের সম্পর্কে</a>
-              <a href="#contact" onClick={(e) => scrollTo(e, '#contact')}>যোগাযোগ</a>
+              <a href="#home" onClick={(e) => scrollTo(e, '#home')}>{t('home')}</a>
+              <a href="#products" onClick={(e) => scrollTo(e, '#products')}>{t('products')}</a>
+              <a href="#categories" onClick={(e) => scrollTo(e, '#categories')}>{t('categories')}</a>
+              <a href="#about" onClick={(e) => scrollTo(e, '#about')}>{t('about')}</a>
+              <a href="#contact" onClick={(e) => scrollTo(e, '#contact')}>{t('contact')}</a>
             </div>
           </div>
 
           {/* Categories */}
           <div>
-            <h4>পণ্যের ক্যাটাগরি</h4>
+            <h4>{t('productCategories')}</h4>
             <div className="footer-links">
               {categories.slice(0, 6).map(cat => (
                 <a href="#categories" key={cat.id} onClick={(e) => scrollTo(e, '#categories')}>
-                  {cat.name}
+                  {cat[lang === 'en' ? 'nameEn' : 'name']}
                 </a>
               ))}
             </div>
@@ -62,10 +67,10 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4>যোগাযোগ</h4>
+            <h4>{t('contact')}</h4>
             <div className="footer-contact-item">
               <MapPin size={16} />
-              <span>{shopConfig.address}</span>
+              <span>{lang === 'en' ? shopConfig.addressEn : shopConfig.address}</span>
             </div>
             {shopConfig.phone && (
               <div className="footer-contact-item">
@@ -87,14 +92,14 @@ export default function Footer() {
               }}
             >
               <ExternalLink size={14} />
-              ম্যাপে দোকান দেখুন
+              {t('viewOnMap')}
             </a>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>© {currentYear} {shopConfig.name}। সর্বস্বত্ব সংরক্ষিত।</span>
-          <span>যত্নের সাথে তৈরি 🇧🇩</span>
+          <span>{t('copyright', { year: currentYear })}</span>
+          <span>{t('craftedWithCare')}</span>
         </div>
       </div>
     </footer>

@@ -21,45 +21,34 @@ const iconMap = {
 
 export default function Categories({ activeCategory, onCategoryChange }) {
   return (
-    <section className="section section-alt" id="categories">
-      <div className="container">
-        <div className="section-header">
-          <h2>আমাদের পণ্যের ক্যাটাগরি</h2>
-          <p>আপনার প্রয়োজন অনুযায়ী ক্যাটাগরি বেছে নিন</p>
-        </div>
-        <div className="categories-grid">
-          <div
-            className={`category-card ${activeCategory === 'all' ? 'active' : ''}`}
-            onClick={() => onCategoryChange('all')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onCategoryChange('all')}
+    <div className="categories-bar" id="categories" role="tablist" aria-label="পণ্যের ক্যাটাগরি">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeCategory === 'all'}
+        className={`category-pill ${activeCategory === 'all' ? 'active' : ''}`}
+        onClick={() => onCategoryChange('all')}
+      >
+        <Package size={17} className="category-pill-icon" />
+        <span>সব পণ্য</span>
+      </button>
+      {categories.map(cat => {
+        const Icon = iconMap[cat.icon] || Package;
+        const isActive = activeCategory === cat.id;
+        return (
+          <button
+            key={cat.id}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            className={`category-pill ${isActive ? 'active' : ''}`}
+            onClick={() => onCategoryChange(cat.id)}
           >
-            <div className="category-icon">
-              <Package size={24} />
-            </div>
-            <h3>সব পণ্য</h3>
-          </div>
-          {categories.map(cat => {
-            const Icon = iconMap[cat.icon] || Package;
-            return (
-              <div
-                key={cat.id}
-                className={`category-card ${activeCategory === cat.id ? 'active' : ''}`}
-                onClick={() => onCategoryChange(cat.id)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && onCategoryChange(cat.id)}
-              >
-                <div className="category-icon">
-                  <Icon size={24} />
-                </div>
-                <h3>{cat.name}</h3>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+            <Icon size={17} className="category-pill-icon" />
+            <span>{cat.name}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }

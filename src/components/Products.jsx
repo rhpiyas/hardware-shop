@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Search, X, SearchX } from 'lucide-react';
 import products, { categories } from '../data/products';
 import ProductCard from './ProductCard';
+import Categories from './Categories';
 
 export default function Products({
   searchQuery,
@@ -65,6 +66,12 @@ export default function Products({
           <h2>আমাদের পণ্যসমূহ</h2>
           <p>আপনার প্রয়োজনীয় হার্ডওয়্যার পণ্য খুঁজে নিন সহজেই।</p>
         </div>
+
+        {/* Categories Bar */}
+        <Categories
+          activeCategory={activeCategory}
+          onCategoryChange={onCategoryChange}
+        />
 
         {/* Toolbar */}
         <div className="products-toolbar">

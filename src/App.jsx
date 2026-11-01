@@ -3,7 +3,6 @@ import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Highlights from './components/Highlights';
-import Categories from './components/Categories';
 import Products from './components/Products';
 import ProductModal from './components/ProductModal';
 import CartSidebar from './components/CartSidebar';
@@ -29,22 +28,12 @@ export default function App() {
     }
   }, []);
 
-  const handleCategoryChange = useCallback((categoryId) => {
-    setActiveCategory(categoryId);
-    const el = document.querySelector('#products');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-
   return (
     <CartProvider>
       <Header onSearch={handleSearch} />
       <main>
         <Hero />
         <Highlights />
-        <Categories
-          activeCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
-        />
         <Products
           searchQuery={searchQuery}
           activeCategory={activeCategory}

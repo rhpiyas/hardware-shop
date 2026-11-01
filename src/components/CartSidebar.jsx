@@ -7,6 +7,16 @@ export default function CartSidebar() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, clearCart, totalItems } = useCart();
   const { lang, t } = useLanguage();
 
+  const isWhatsAppConfigured = !!shopConfig.whatsapp;
+  const itemsCountFormatted = totalItems.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US');
+
+  // Calculate total price for items that have confirmed numeric prices
+  const pricedItems = items.filter(item => typeof item.price === 'number' && item.price > 0);
+  const hasPricedItems = pricedItems.length > 0;
+  const hasUnpricedItems = items.some(item => !item.price);
+  const totalPrice = pricedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalPriceFormatted = totalPrice.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US');
+
   const generateWhatsAppMessage = () => {
     const isEn = lang === 'en';
     const shopName = isEn ? shopConfig.nameEn : shopConfig.name;
@@ -18,10 +28,14 @@ export default function CartSidebar() {
         const unit = item.unitEn || item.unit;
         message += `${i + 1}. ${name} — Quantity: ${item.quantity}`;
         if (item.price) {
-          message += ` (৳${item.price.toLocaleString('en-US')} ${unit})`;
+          const itemSubtotal = (item.price * item.quantity).toLocaleString('en-US');
+          message += ` (৳${item.price.toLocaleString('en-US')} ${unit} = ৳${itemSubtotal})`;
         }
         message += `\n`;
       });
+      if (hasPricedItems) {
+        message += `\nEstimated Total: ৳${totalPriceFormatted}\n`;
+      }
       message += `\nPlease let me know the confirmed prices and stock availability. Thank you.`;
       return encodeURIComponent(message);
     } else {
@@ -29,10 +43,14 @@ export default function CartSidebar() {
       items.forEach((item, i) => {
         message += `${i + 1}. ${item.name} — পরিমাণ: ${item.quantity}`;
         if (item.price) {
-          message += ` (৳${item.price.toLocaleString('bn-BD')} ${item.unit})`;
+          const itemSubtotal = (item.price * item.quantity).toLocaleString('bn-BD');
+          message += ` (৳${item.price.toLocaleString('bn-BD')} ${item.unit} = ৳${itemSubtotal})`;
         }
         message += `\n`;
       });
+      if (hasPricedItems) {
+        message += `\nমোট আনুমানিক মূল্য: ৳${totalPriceFormatted}\n`;
+      }
       message += `\nদয়া করে দাম ও স্টক সম্পর্কে জানাবেন। ধন্যবাদ।`;
       return encodeURIComponent(message);
     }
@@ -43,9 +61,6 @@ export default function CartSidebar() {
     const message = generateWhatsAppMessage();
     window.open(`https://wa.me/${shopConfig.whatsapp.replace('+', '')}?text=${message}`, '_blank');
   };
-
-  const isWhatsAppConfigured = !!shopConfig.whatsapp;
-  const itemsCountFormatted = totalItems.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US');
 
   return (
     <>
@@ -97,6 +112,11 @@ export default function CartSidebar() {
                     <h4>{itemName}</h4>
                     <span className="cart-item-price">
                       {formattedPrice}
+                      {item.quantity > 1 && item.price && (
+                        <span className="cart-item-subtotal">
+                          {' '}(= ৳{(item.price * item.quantity).toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US')})
+                        </span>
+                      )}
                     </span>
                     <div className="cart-item-qty">
                       <button
@@ -132,6 +152,22 @@ export default function CartSidebar() {
 
         {items.length > 0 && (
           <div className="cart-sidebar-footer">
+            <div className="cart-summary">
+              <div className="cart-summary-row">
+                <span className="cart-summary-label">{t('totalItemsLabel')}</span>
+                <span className="cart-summary-value">{itemsCountFormatted}</span>
+              </div>
+              <div className="cart-summary-row cart-total-row">
+                <span className="cart-summary-label">{t('totalAmount')}</span>
+                <span className="cart-summary-total">
+                  {hasPricedItems ? `৳${totalPriceFormatted}` : t('priceOnConfirmation')}
+                </span>
+              </div>
+              {hasUnpricedItems && hasPricedItems && (
+                <p className="cart-summary-note">{t('unpricedItemsNote')}</p>
+              )}
+            </div>
+
             <button
               type="button"
               className={`btn ${isWhatsAppConfigured ? 'whatsapp-btn' : 'whatsapp-disabled'}`}

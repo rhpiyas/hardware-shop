@@ -1687,6 +1687,60 @@ input, select, textarea {
   margin-bottom: var(--space-4);
 }
 
+.cart-item-subtotal {
+  font-size: var(--text-xs);
+  color: var(--orange-600);
+  font-weight: 700;
+}
+
+.cart-summary {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.cart-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  color: var(--gray-600);
+  margin-bottom: var(--space-2);
+}
+
+.cart-summary-value {
+  font-weight: 700;
+  color: var(--navy-800);
+}
+
+.cart-total-row {
+  border-top: 1px dashed var(--gray-300);
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+  margin-bottom: 0;
+}
+
+.cart-total-row .cart-summary-label {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.cart-summary-total {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--orange-500);
+}
+
+.cart-summary-note {
+  font-size: 0.725rem;
+  color: var(--gray-500);
+  margin-top: var(--space-2);
+  line-height: 1.35;
+}
+
 .cart-sidebar-footer {
   padding: var(--space-5) var(--space-6);
   border-top: 1px solid var(--gray-200);
@@ -2564,6 +2618,39 @@ input, select, textarea {
 [data-theme="dark"] .cart-item-qty button:hover {
   border-color: var(--orange-400);
   color: var(--orange-400);
+}
+
+[data-theme="dark"] .cart-item-subtotal {
+  color: var(--orange-400);
+}
+
+[data-theme="dark"] .cart-summary {
+  background: #111d30;
+  border-color: #1e2f4a;
+}
+
+[data-theme="dark"] .cart-summary-row {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .cart-summary-value {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .cart-total-row {
+  border-top-color: #233554;
+}
+
+[data-theme="dark"] .cart-total-row .cart-summary-label {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .cart-summary-total {
+  color: var(--orange-400);
+}
+
+[data-theme="dark"] .cart-summary-note {
+  color: #64748b;
 }
 
 [data-theme="dark"] .cart-sidebar-footer {

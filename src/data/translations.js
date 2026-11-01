@@ -61,6 +61,10 @@ export const translations = {
     sendWhatsApp: 'WhatsApp-এ পাঠান',
     addWhatsAppConfig: 'WhatsApp নম্বর যোগ করুন (কনফিগ)',
     clearList: 'তালিকা খালি করুন',
+    totalItemsLabel: 'মোট পণ্যের সংখ্যা',
+    totalAmount: 'মোট আনুমানিক মূল্য',
+    unpricedItemsNote: '* কিছু পণ্যের বর্তমান দাম দোকান থেকে নিশ্চিত করতে হবে',
+    priceOnConfirmation: 'দোকান থেকে নিশ্চিত করতে হবে',
 
     // About
     aboutTitle: 'আলামিন হার্ডওয়্যার সম্পর্কে',
@@ -185,6 +189,10 @@ export const translations = {
     sendWhatsApp: 'Send via WhatsApp',
     addWhatsAppConfig: 'Add WhatsApp Number (Config)',
     clearList: 'Clear List',
+    totalItemsLabel: 'Total Items',
+    totalAmount: 'Estimated Total',
+    unpricedItemsNote: '* Some items require price confirmation at shop',
+    priceOnConfirmation: 'To be confirmed at shop',
 
     // About
     aboutTitle: 'About Alamin Hardware',

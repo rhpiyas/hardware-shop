@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Search, X, SearchX } from 'lucide-react';
+import { Search, X, SearchX, ArrowUpDown, ChevronDown } from 'lucide-react';
 import products, { categories } from '../data/products';
 import ProductCard from './ProductCard';
 import Categories from './Categories';
@@ -76,7 +76,7 @@ export default function Products({
         {/* Toolbar */}
         <div className="products-toolbar">
           <div className="products-search">
-            <Search size={18} style={{ color: '#9ba5b4', flexShrink: 0 }} />
+            <Search size={18} className="search-icon" />
             <input
               type="text"
               placeholder="যেমন: সিমেন্ট, পাইপ, রং, হাতুড়ি..."
@@ -86,8 +86,9 @@ export default function Products({
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => onSearchChange('')}
-                style={{ display: 'flex', color: '#9ba5b4' }}
+                className="search-clear-btn"
                 aria-label="সার্চ মুছুন"
               >
                 <X size={16} />
@@ -95,25 +96,38 @@ export default function Products({
             )}
           </div>
 
-          <div className="products-controls">
+          <div className="products-toolbar-right">
+            <span className="products-count">
+              মোট <strong>{filteredProducts.length.toLocaleString('bn-BD')}</strong>টি পণ্য
+            </span>
+
             {activeCategoryName && (
               <span className="filter-tag">
                 {activeCategoryName}
-                <button onClick={() => onCategoryChange('all')} aria-label="ক্যাটাগরি ফিল্টার মুছুন">
-                  <X size={14} />
+                <button
+                  type="button"
+                  onClick={() => onCategoryChange('all')}
+                  aria-label="ক্যাটাগরি ফিল্টার মুছুন"
+                >
+                  <X size={13} />
                 </button>
               </span>
             )}
 
-            <select
-              value={sortOrder}
-              onChange={(e) => onSortChange(e.target.value)}
-              aria-label="পণ্য সাজান"
-            >
-              <option value="default">সাজানোর ক্রম</option>
-              <option value="price-low">দাম: কম থেকে বেশি</option>
-              <option value="price-high">দাম: বেশি থেকে কম</option>
-            </select>
+            <div className="sort-select-wrapper">
+              <ArrowUpDown size={16} className="sort-icon" />
+              <select
+                value={sortOrder}
+                onChange={(e) => onSortChange(e.target.value)}
+                aria-label="পণ্য সাজান"
+                className="sort-select"
+              >
+                <option value="default">সাজানোর ক্রম</option>
+                <option value="price-low">দাম: কম থেকে বেশি</option>
+                <option value="price-high">দাম: বেশি থেকে কম</option>
+              </select>
+              <ChevronDown size={15} className="sort-chevron" />
+            </div>
           </div>
         </div>
 

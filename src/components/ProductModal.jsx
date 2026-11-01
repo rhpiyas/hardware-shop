@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ImageOff, Phone, ShoppingCart } from 'lucide-react';
+import { X, ImageOff, Phone, ClipboardList } from 'lucide-react';
 import { categories } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -82,7 +82,7 @@ export default function ProductModal({ product, onClose }) {
 
           <div className="modal-actions">
             <button type="button" className="btn btn-primary" onClick={() => { addItem(product); }}>
-              <ShoppingCart size={18} />
+              <ClipboardList size={18} />
               {t('addToList')}
             </button>
             <button type="button" className="btn btn-secondary" onClick={handleContact}>

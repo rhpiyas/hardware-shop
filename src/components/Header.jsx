@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, ShoppingCart, MapPin, Phone, Sun, Moon, Languages } from 'lucide-react';
+import { Menu, X, Search, ClipboardList, MapPin, Phone, Sun, Moon, Languages } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -43,6 +43,7 @@ export default function Header({ onSearch }) {
 
   const brandName = lang === 'en' ? shopConfig.nameEn : shopConfig.name;
   const addressShort = lang === 'en' ? (shopConfig.addressShortEn || 'Rampur Bazar, Kalihati') : shopConfig.addressShort;
+  const itemsCountFormatted = totalItems.toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US');
 
   return (
     <>
@@ -122,13 +123,16 @@ export default function Header({ onSearch }) {
                 {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
               </button>
 
+              {/* List / Inquiry Toggle */}
               <button
+                type="button"
                 className="cart-btn"
                 onClick={() => setIsOpen(true)}
                 aria-label={t('cartTitle')}
+                title={t('cartTitle')}
               >
-                <ShoppingCart size={22} />
-                {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+                <ClipboardList size={19} />
+                {totalItems > 0 && <span className="cart-badge">{itemsCountFormatted}</span>}
               </button>
 
               <a
@@ -140,11 +144,13 @@ export default function Header({ onSearch }) {
               </a>
 
               <button
+                type="button"
                 className="mobile-menu-btn"
                 onClick={() => setIsMobileNavOpen(true)}
                 aria-label={t('openMenu')}
+                title={t('openMenu')}
               >
-                <Menu size={24} />
+                <Menu size={20} />
               </button>
             </div>
           </div>
@@ -158,7 +164,7 @@ export default function Header({ onSearch }) {
             <div className="logo-text">
               <span className="brand-name" style={{ fontSize: '1.125rem' }}>{brandName}</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <button
                 type="button"
                 className="lang-toggle-btn"
@@ -178,8 +184,24 @@ export default function Header({ onSearch }) {
               >
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <button onClick={() => setIsMobileNavOpen(false)} aria-label={t('closeMenu')}>
-                <X size={24} />
+              <button
+                type="button"
+                className="cart-btn"
+                onClick={() => { setIsMobileNavOpen(false); setIsOpen(true); }}
+                aria-label={t('cartTitle')}
+                title={t('cartTitle')}
+              >
+                <ClipboardList size={18} />
+                {totalItems > 0 && <span className="cart-badge">{itemsCountFormatted}</span>}
+              </button>
+              <button
+                type="button"
+                className="mobile-close-btn"
+                onClick={() => setIsMobileNavOpen(false)}
+                aria-label={t('closeMenu')}
+                title={t('closeMenu')}
+              >
+                <X size={20} />
               </button>
             </div>
           </div>

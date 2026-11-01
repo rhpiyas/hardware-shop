@@ -1,4 +1,4 @@
-import { X, Plus, Minus, Trash2, ShoppingCart, MessageCircle } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ClipboardList, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 import shopConfig from '../data/shopConfig';
@@ -64,7 +64,7 @@ export default function CartSidebar() {
         <div className="cart-sidebar-body">
           {items.length === 0 ? (
             <div className="cart-empty">
-              <ShoppingCart size={48} />
+              <ClipboardList size={48} />
               <h3 style={{ marginTop: '1rem', color: '#374151' }}>{t('cartEmptyTitle')}</h3>
               <p style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>
                 {t('cartEmptyDesc')}

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ImageOff } from 'lucide-react';
+import { ImageOff, ClipboardList } from 'lucide-react';
 import { categories } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -56,6 +56,7 @@ export default function ProductCard({ product, onViewDetails }) {
             className="btn btn-primary btn-sm"
             onClick={handleAddToCart}
           >
+            <ClipboardList size={14} style={{ marginRight: '0.25rem', flexShrink: 0 }} />
             {t('addToList')}
           </button>
           <button
